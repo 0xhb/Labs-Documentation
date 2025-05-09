@@ -1,0 +1,21 @@
+site_name: Cloud Security Lab Walkthroughs
+theme:
+  name: material
+
+nav:
+  - Home: index.md
+  - Labs:
+      - CloudGoat:
+          - Beanstalk Secrets: labs/cloudgoat/beanstalk_secrets.md
+      - AzureGoat:
+          - ...: labs/azuregoat/example.md
+      - AWSGoat:
+          - ...: labs/awsgoat/example.md
+      - CloudFoxable:
+          - ...: labs/cloudfoxable/example.md
+      - flaws:
+          - ...: labs/flaws/example.md
+
+plugins:
+  - search
+  - glightbox  # enables image zoom
