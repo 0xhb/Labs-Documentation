@@ -7,6 +7,8 @@ nav:
   - Labs:
       - CloudGoat:
           - Beanstalk Secrets: labs/cloudgoat/beanstalk_secrets.md
+          - Vulnerable Cognito: labs/cloudgoat/vulnerable_cognito.md
+          - Vulnerable Lambda: labs/cloudgoat/vulnerable_lambda.md
       - AzureGoat:
           - ...: labs/azuregoat/example.md
       - AWSGoat:
