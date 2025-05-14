@@ -41,6 +41,8 @@ nmap <IP_ADDRESS> -Pn
 
 One of the IP addresses has port 22 (SSH) open. From the config file, we can identify this as the instance associated with user **justin**.
 
+![Downloaded SSH key with proper permissions](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-04.png)
+
 
 #### 4. Retrieve SSH Key
 
@@ -54,7 +56,9 @@ chmod 400 justin.pem
 
 ```
 
-![Downloaded SSH key with proper permissions](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-04.png)
+![Downloaded SSH key with proper permissions](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-05.png)
+![Downloaded SSH key with proper permissions](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-06.png)
+
 
 ### Phase 2: Initial VM Access and Reconnaissance
 
@@ -68,7 +72,7 @@ ssh -i justin.pem justin@<IP_ADDRESS>
 
 ```
 
-![Successful SSH connection to the VM](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-05.png)
+![Successful SSH connection to the VM](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-07.png)
 
 We logged in successfully as the screen shows.
 
@@ -82,7 +86,7 @@ gcloud config list
 
 ``` 
 
-![gcloud config showing project and account information](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-06.png)
+![gcloud config showing project and account information](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-08.png)
 
 
 This VM is using the default compute service account, which typically has **Editor** level access but might be restricted by access scopes.
@@ -100,7 +104,7 @@ curl http://metadata.google.internal/computeMetadata/v1/instance/service-account
 ```
  
 
-![Service account scopes showing compute and storage access](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-07.png)
+![Service account scopes showing compute and storage access](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-09.png)
 
 The VM has full access to compute services and read access to storage buckets.
  
@@ -119,7 +123,7 @@ gcloud compute instances list
 ```
   
 
-![List of compute instances showing admin-vm](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-08.png)  
+![List of compute instances showing admin-vm](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-10.png)  
 
 We've identified another VM named **admin-vm**. Keep the public IP address for this instance, we will need it after. 
 
@@ -139,7 +143,7 @@ ssh-keygen -t rsa -C "attacker" -f ./key -P ""
 ```
  
 
-![SSH key generation output](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-09.png)
+![SSH key generation output](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-11.png)
 
 This creates a public key (key.pub) and private key (key) for a user named "attacker".
 
@@ -158,7 +162,7 @@ cat ./meta.txt  # Verify the contents
 ```
 We store the public key in the **NEWKEY** variable and the we add the **USER:KEY** data to the **meta.txt** file.
 
-![Content of meta.txt file showing SSH key](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-10.png)
+![Content of meta.txt file showing SSH key](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-12.png)
 
 
 #### 11. Update the Admin VM's Metadata
@@ -171,7 +175,7 @@ gcloud compute instances add-metadata admin-vm --metadata-from-file ssh-keys=met
 
 ```  
 
-![Adding metadata to the admin VM](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-11.png) 
+![Adding metadata to the admin VM](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-13.png) 
 
 This command will add the content of meta.txt in the ssh-keys section of the instance metadata.
 
@@ -188,7 +192,7 @@ gcloud compute instances describe admin-vm --zone us-west1-c
 
 ```
 
-![Instance description showing updated SSH keys](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-12.png)
+![Instance description showing updated SSH keys](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-14.png)
  
 
 The SSH key for user "attacker" should now be visible in the metadata.
@@ -207,7 +211,7 @@ ssh -i ./key attacker@<ADMIN_VM_IP> # Replace with the Public IP address of the 
 
 ```  
 
-![Successfully connected to admin VM](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-13.png)
+![Successfully connected to admin VM](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-15.png)
 
 We now have access to the admin VM. By default, users added through instance metadata have sudo privileges.  
 
@@ -221,7 +225,7 @@ gcloud config list
 
 ```
 
-![Admin VM service account information](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-14.png)
+![Admin VM service account information](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-16.png)
 
 The admin VM is using a service account named **admin-service-account**.
 
@@ -236,7 +240,7 @@ gcloud projects get-iam-policy <PROJECT_ID>
 ```
 
 
-![IAM policy showing owner role](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-15.png)
+![IAM policy showing owner role](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-17.png)
 
 The admin service account has the **owner** role on the project, which will grant us full administrative access.
 
@@ -253,7 +257,7 @@ curl http://metadata.google.internal/computeMetadata/v1/instance/service-account
 
 ```
 
-![Scopes showing cloud-platform access](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-16.png)
+![Scopes showing cloud-platform access](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-18.png)
 
 
 The VM has the **cloud-platform** scope, which provides full API access to all Google Cloud services.
