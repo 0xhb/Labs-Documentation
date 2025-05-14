@@ -19,6 +19,7 @@ This site is a collection of step-by-step guides for exploring and exploiting vu
 - [CloudGoat](https://github.com/RhinoSecurityLabs/cloudgoat) – AWS-focused vulnerable scenarios
 - [AzureGoat](https://github.com/madhuakula/azuregoat) – Vulnerable Azure setups
 - [AWSGoat](https://github.com/madhuakula/awsgoat) – AWS security misconfiguration playground
+- [GCPGoat](https://github.com/ine-labs/GCPGoat) – Vulnerable GCP Infrastructure
 - [CloudFoxable](https://github.com/BishopFox/cloudfoxable) – CTF-style AWS challenges
 - more to be added soon!
 
