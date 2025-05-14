@@ -56,4 +56,10 @@ PWND, we have now admin privileges over the cloud environment, let use the new k
 Finally let's check the Secrets Manager for the flag:
 ![Beanstalk Secret](../../screenshots/beanstalk_secrets/2025-04-15%2023_38_12-CloudKali%20-%20VMware%20Workstation.png)
 
+💸 Don’t forget to destroy the environment and save those cloud credits!
+
+```bash
+cloudgoat destroy beanstalk_secrets
+```
+
 🛡️ That’s it for this lab — until next time, stay sharp and happy hacking!
