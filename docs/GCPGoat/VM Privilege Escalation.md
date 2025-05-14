@@ -193,6 +193,7 @@ gcloud compute instances describe admin-vm --zone us-west1-c
 ```
 
 ![Instance description showing updated SSH keys](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-14.png)
+![Successfully connected to admin VM](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-15.png)
  
 
 The SSH key for user "attacker" should now be visible in the metadata.
@@ -211,7 +212,7 @@ ssh -i ./key attacker@<ADMIN_VM_IP> # Replace with the Public IP address of the 
 
 ```  
 
-![Successfully connected to admin VM](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-15.png)
+![Successfully connected to admin VM](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-16.png)
 
 We now have access to the admin VM. By default, users added through instance metadata have sudo privileges.  
 
