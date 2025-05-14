@@ -7,8 +7,14 @@ nav:
   - Labs:
       - CloudGoat:
           - Beanstalk Secrets: labs/cloudgoat/beanstalk_secrets.md
+          - IAM Privilege Escalation by Rollback: labs/cloudgoat/iam_privesc_by_rollback.md
+          - IAM Privilege Escalation by key Rotation: labs/cloudgoat/iam_privesc_by_key_rotation.md
+          - Lambda Privilege Escalation: labs/cloudgoat/lambda_privesc.md
+          - SNS Secrets: labs/cloudgoat/sns_secrets.md
+          - SQS Flag Shop: labs/cloudgoat/sqs_flag_shop.md
           - Vulnerable Cognito: labs/cloudgoat/vulnerable_cognito.md
           - Vulnerable Lambda: labs/cloudgoat/vulnerable_lambda.md
+
       - AzureGoat:
           - ...: labs/azuregoat/example.md
       - AWSGoat:
