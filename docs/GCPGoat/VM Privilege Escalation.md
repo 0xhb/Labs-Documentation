@@ -226,7 +226,7 @@ gcloud config list
 
 ```
 
-![Admin VM service account information](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-16.png)
+![Admin VM service account information](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-17.png)
 
 The admin VM is using a service account named **admin-service-account**.
 
@@ -241,7 +241,7 @@ gcloud projects get-iam-policy <PROJECT_ID>
 ```
 
 
-![IAM policy showing owner role](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-17.png)
+![IAM policy showing owner role](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-18.png)
 
 The admin service account has the **owner** role on the project, which will grant us full administrative access.
 
@@ -258,7 +258,7 @@ curl http://metadata.google.internal/computeMetadata/v1/instance/service-account
 
 ```
 
-![Scopes showing cloud-platform access](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-18.png)
+![Scopes showing cloud-platform access](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-19.png)
 
 
 The VM has the **cloud-platform** scope, which provides full API access to all Google Cloud services.
@@ -278,6 +278,6 @@ gcloud compute ssh admin-vm
 
 This command will add the current user to the admin-vm instance by modifying the metadata.
 
-![Direct SSH access to admin VM](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-17.png)
+![Direct SSH access to admin VM](GCPGoat%20Screenshots/GCPGoat-Lab03/GCPGoat-Lab03-20.png)
 
 We are now logged in to the admin-vm with user justin.
