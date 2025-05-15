@@ -1,4 +1,4 @@
-# CloudGoat: IAM Privilege Escalation via Beanstalk Secrets
+# CloudGoat: SQS Flag Shop
 
 ## 🧠 Scenario Summary
 

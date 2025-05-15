@@ -1,4 +1,4 @@
-# CloudGoat: IAM Privilege Escalation via Beanstalk Secrets
+# CloudGoat: IAM Privilege Escalation using AWS Lambda
 
 ## 🧠 Scenario Summary
 

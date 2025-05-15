@@ -1,4 +1,4 @@
-# CloudGoat: IAM Privilege Escalation via Beanstalk Secrets
+# CloudGoat: Simple Notification Service Secrets
 
 ## 🧠 Scenario Summary
 
