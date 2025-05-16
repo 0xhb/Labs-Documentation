@@ -14,14 +14,14 @@ Using this information, we'll escalate privileges to gain administrative access 
 #### 1. Access the Application
 Register a new user account in the web application, then log in with your credentials.
 
-![](GCPGoat%20Screenshots/GCPGoat-Lab02/GCPGoat-Lab01-01.png)
+![](GCPGoat%20Screenshots/GCPGoat-Lab01/GCPGoat-Lab01-01.png)
 
-![](GCPGoat%20Screenshots/GCPGoat-Lab02/GCPGoat-Lab01-02.png)
+![](GCPGoat%20Screenshots/GCPGoat-Lab01/GCPGoat-Lab01-02.png)
 
 #### 2. Identify the SSRF Vector
 Navigate to the "Newpost" section from the side navigation menu.
 
-![](GCPGoat%20Screenshots/GCPGoat-Lab02/GCPGoat-Lab01-03.png)
+![](GCPGoat%20Screenshots/GCPGoat-Lab01/GCPGoat-Lab01-03.png)
 
 Create a new post with the following details:
 - Headline: "SSRF test" (or any test title)
@@ -34,7 +34,7 @@ Before submitting the form:
 2. Select the "Network" tab to monitor HTTP requests
 3. Click the "Upload" button to submit the form
 
-![](GCPGoat%20Screenshots/GCPGoat-Lab02/GCPGoat-Lab01-04.png)
+![](GCPGoat%20Screenshots/GCPGoat-Lab01/GCPGoat-Lab01-04.png)
 
 You should see a "URL File uploaded successfully" notification at the bottom of the screen.
 
@@ -45,11 +45,11 @@ In the Network tab of the developer tools:
 3. Copy the returned URL
 4. Open this URL in a new browser tab
 
-![](GCPGoat%20Screenshots/GCPGoat-Lab02/GCPGoat-Lab01-05.png)
+![](GCPGoat%20Screenshots/GCPGoat-Lab01/GCPGoat-Lab01-05.png)
 
 The browser will display or download the contents of the `/etc/passwd` file, confirming that the SSRF vulnerability exists.
 
-![](GCPGoat%20Screenshots/GCPGoat-Lab02/GCPGoat-Lab01-06.png)
+![](GCPGoat%20Screenshots/GCPGoat-Lab01/GCPGoat-Lab01-06.png)
 
 ### Phase 2: Information Gathering
 
@@ -62,11 +62,11 @@ file:///proc/self/environ
 
 This file contains environment variables set for the cloud function.
 
-![](GCPGoat%20Screenshots/GCPGoat-Lab02/GCPGoat-Lab01-07.png)
+![](GCPGoat%20Screenshots/GCPGoat-Lab01/GCPGoat-Lab01-07.png)
 
 After successful upload, open or download the file using the response URL.
 
-![](GCPGoat%20Screenshots/GCPGoat-Lab02/GCPGoat-Lab01-08.png)
+![](GCPGoat%20Screenshots/GCPGoat-Lab01/GCPGoat-Lab01-08.png)
 
 If the file downloads instead of displaying in the browser, use the terminal to view its contents:
 
@@ -74,7 +74,7 @@ If the file downloads instead of displaying in the browser, use the terminal to 
 cat [downloaded-file-name]
 ```
 
-![](GCPGoat%20Screenshots/GCPGoat-Lab02/GCPGoat-Lab01-09.png)
+![](GCPGoat%20Screenshots/GCPGoat-Lab01/GCPGoat-Lab01-09.png)
 
 From this output, you can identify:
 - GCP project name
@@ -91,15 +91,15 @@ file:///workspace/main.py
 
 This targets the source code file of the Python cloud function, which is typically located in the `/workspace` directory.
 
-![](GCPGoat%20Screenshots/GCPGoat-Lab02/GCPGoat-Lab01-10.png)
+![](GCPGoat%20Screenshots/GCPGoat-Lab01/GCPGoat-Lab01-10.png)
 
 After successful upload, retrieve the file using the response URL.
 
-![](GCPGoat%20Screenshots/GCPGoat-Lab02/GCPGoat-Lab01-11.png)
+![](GCPGoat%20Screenshots/GCPGoat-Lab01/GCPGoat-Lab01-11.png)
 
 The downloaded file contains the entire source code of the cloud function. Upon inspection, you'll discover a hidden development endpoint.
 
-![](GCPGoat%20Screenshots/GCPGoat-Lab02/GCPGoat-Lab01-12.png)
+![](GCPGoat%20Screenshots/GCPGoat-Lab01/GCPGoat-Lab01-12.png)
 
 This endpoint (`/dump-db-321423541325`) appears to dump the entire database, which is a significant security issue.
 
@@ -109,7 +109,7 @@ This endpoint (`/dump-db-321423541325`) appears to dump the entire database, whi
 From the developer tools:
 1. Identify the cloud function's base URL from the request headers
 
-![](GCPGoat%20Screenshots/GCPGoat-Lab02/GCPGoat-Lab01-13.png)
+![](GCPGoat%20Screenshots/GCPGoat-Lab01/GCPGoat-Lab01-13.png)
 
 2. Construct the debug endpoint URL by appending the path discovered in the source code:
 
@@ -119,14 +119,14 @@ From the developer tools:
 
 3. Access this URL in your browser
 
-![](GCPGoat%20Screenshots/GCPGoat-Lab02/GCPGoat-Lab01-14.png)
+![](GCPGoat%20Screenshots/GCPGoat-Lab01/GCPGoat-Lab01-14.png)
 
 The response contains the entire database contents in JSON format, including user credentials.
 
 #### 8. Identify Admin Account
 Analyze the database dump to locate an account with administrative privileges (`auth_level: 0`):
 
-![](GCPGoat%20Screenshots/GCPGoat-Lab02/GCPGoat-Lab01-15.png)
+![](GCPGoat%20Screenshots/GCPGoat-Lab01/GCPGoat-Lab01-15.png)
 
 Note the following details for this admin account:
 - Email address
@@ -138,12 +138,12 @@ Navigate to the login page and initiate a password reset:
 
 1. Click "Forgot Password"
 
-![](GCPGoat%20Screenshots/GCPGoat-Lab02/GCPGoat-Lab01-16.png)
+![](GCPGoat%20Screenshots/GCPGoat-Lab01/GCPGoat-Lab01-16.png)
 
 2. Enter the admin email address and answer the security question using the information from the database dump
 3. Set a new password of your choice
 
-![](GCPGoat%20Screenshots/GCPGoat-Lab02/GCPGoat-Lab01-17.png)
+![](GCPGoat%20Screenshots/GCPGoat-Lab01/GCPGoat-Lab01-17.png)
 
 You should receive a "Password changed successfully" confirmation.
 
@@ -152,7 +152,7 @@ Return to the login page and sign in with:
 - Email: [Admin email from database]
 - Password: [Your new password]
 
-![](GCPGoat%20Screenshots/GCPGoat-Lab02/GCPGoat-Lab01-18.png)
+![](GCPGoat%20Screenshots/GCPGoat-Lab01/GCPGoat-Lab01-18.png)
 
 You now have administrative access to the application.
 
