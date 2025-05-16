@@ -23,9 +23,10 @@ nav:
           - ...: labs/cloudfoxable/example.md
       - flaws:
           - ...: labs/flaws/example.md
-      - GCPGaot:
-          - Misconfigured Bucket Policy PrivEsc: GCPGoat/Exploiting Misconfigured Bucket Policies for Privilege Escalation.md
-          - VM Privilege Escalation: GCPGoat/VM Privilege Escalation.md
+      - GCPGoat:
+          - SSRF Attack Scenario: GCPGoat/Lab 01.md
+          - Misconfigured Bucket Policy PrivEsc: GCPGoat/Lab 02.md
+          - VM Privilege Escalation: GCPGoat/Lab 03.md
 
 plugins:
   - search
