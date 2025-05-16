@@ -24,9 +24,9 @@ nav:
       - flaws:
           - ...: labs/flaws/example.md
       - GCPGoat:
-          - SSRF Attack Scenario: GCPGoat/Lab 01.md
-          - Misconfigured Bucket Policy PrivEsc: GCPGoat/Lab 02.md
-          - VM Privilege Escalation: GCPGoat/Lab 03.md
+          - SSRF Attack Scenario: GCPGoat/Lab_01.md
+          - Misconfigured Bucket Policy PrivEsc: GCPGoat/Lab_02.md
+          - VM Privilege Escalation: GCPGoat/Lab_03.md
 
 plugins:
   - search
