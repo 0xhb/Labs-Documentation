@@ -1,4 +1,4 @@
-In this Part 02 of the lab, we will use the credentials of a low-privileged virtual machine (VM) that we found in the dev bucket. We'll use these credentials to pivot and access higher-privileged compute instances via the low-privileged machine.
+In this lab, we will use the credentials of a low-privileged virtual machine (VM) that we found in the dev bucket. We'll use these credentials to pivot and access higher-privileged compute instances via the low-privileged machine.
 
 
 ### Phase 1: Reconnaissance and Initial Access
