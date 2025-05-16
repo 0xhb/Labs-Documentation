@@ -1,4 +1,4 @@
-In this first part of the lab, we will exploit misconfigured Google Cloud Storage (GCS) bucket policies to gain administrative access to one of the storage buckets.
+In this lab, we will exploit misconfigured Google Cloud Storage (GCS) bucket policies to gain administrative access to one of the storage buckets.
 
 ## Lab Walkthrough
 
